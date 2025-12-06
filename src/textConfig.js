@@ -32,7 +32,9 @@ I want you to know that you are the most precious person in my life. Every day w
     tracks: [
       { id: 1, title: "Dil Cheeze Tujhe Dedi", caption: "You own this heart — dedicated to you 💞" },
       { id: 2, title: "If the world was ending", caption: "Even if the world ends, I'd still find you 🤍" },
-      { id: 3, title: "Dil ka Jo Haal hai", caption: "Tu Kaare Dil Bekarar 💞" }
+      { id: 3, title: "Dil ka Jo Haal hai", caption: "Tu Kaare Dil Bekarar 💞" },
+      { id: 4, title: "Perfect", caption: "You're perfect just the way you are 💕" },
+      { id: 5, title: "All of Me", caption: "I give you all of me, every single part 💝" }
     ]
   },
 

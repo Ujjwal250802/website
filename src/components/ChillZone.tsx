@@ -4,10 +4,14 @@ import textConfig from "../textConfig";
 import music1 from "../music/music1.mp3";
 import music2 from "../music/music2.mp3";
 import music3 from "../music/music3.mp3";
+import music4 from "../music/music4.mp3";
+import music5 from "../music/music5.mp3";
 
 import cover1 from "../musiccover/music1.jpg";
 import cover2 from "../musiccover/music2.jpg";
 import cover3 from "../musiccover/music3.jpg";
+import cover4 from "../musiccover/music4.jpg";
+import cover5 from "../musiccover/music5.jpg";
 
 type Track = {
   id: number;
@@ -26,6 +30,8 @@ export default function ChillZone({ onNext }: ChillZoneProps) {
     { id: 1, title: textConfig.chillZone.tracks[0].title, caption: textConfig.chillZone.tracks[0].caption, src: music1, cover: cover1 },
     { id: 2, title: textConfig.chillZone.tracks[1].title, caption: textConfig.chillZone.tracks[1].caption, src: music2, cover: cover2 },
     { id: 3, title: textConfig.chillZone.tracks[2].title, caption: textConfig.chillZone.tracks[2].caption, src: music3, cover: cover3 },
+    { id: 4, title: textConfig.chillZone.tracks[3].title, caption: textConfig.chillZone.tracks[3].caption, src: music4, cover: cover4 },
+    { id: 5, title: textConfig.chillZone.tracks[4].title, caption: textConfig.chillZone.tracks[4].caption, src: music5, cover: cover5 },
   ];
 
   const audioRefs = useRef<Array<HTMLAudioElement | null>>([]);
