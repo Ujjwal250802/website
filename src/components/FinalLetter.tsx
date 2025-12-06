@@ -2,6 +2,7 @@
 import React, { useEffect, useRef, useState } from "react";
 import { Mail, Heart, Star } from "lucide-react";
 import textConfig from "../textConfig";
+import voiceRecording from "../music/music1.mp3";
 
 interface FinalLetterProps {
   onRestart: () => void;
@@ -14,6 +15,12 @@ export default function FinalLetter({ onRestart }: FinalLetterProps) {
   const typingTextRef = useRef(textConfig.finalLetter.typedDefault);
   const [typedText, setTypedText] = useState("");
   const typingTimerRef = useRef<number | null>(null);
+
+  const audioRef = useRef<HTMLAudioElement | null>(null);
+  const [isPlayingVoice, setIsPlayingVoice] = useState(false);
+  const [voiceProgress, setVoiceProgress] = useState(0);
+  const [voiceCurrentTime, setVoiceCurrentTime] = useState(0);
+  const voiceDuration = 77;
 
   // kiss animation state: store an array of kiss particles to render
   const [kisses, setKisses] = useState<
@@ -82,6 +89,51 @@ export default function FinalLetter({ onRestart }: FinalLetterProps) {
     setTimeout(() => {
       setKisses((s) => s.filter((k) => !batch.find((b) => b.id === k.id)));
     }, 2200 + maxDelay);
+  };
+
+  const toggleVoicePlay = async () => {
+    const audio = audioRef.current;
+    if (!audio) return;
+
+    if (audio.paused) {
+      await audio.play();
+      setIsPlayingVoice(true);
+    } else {
+      audio.pause();
+      setIsPlayingVoice(false);
+    }
+  };
+
+  useEffect(() => {
+    const audio = audioRef.current;
+    if (!audio) return;
+
+    const onTimeUpdate = () => {
+      setVoiceCurrentTime(audio.currentTime);
+      setVoiceProgress((audio.currentTime / voiceDuration) * 100);
+    };
+
+    const onEnded = () => {
+      setIsPlayingVoice(false);
+      setVoiceProgress(0);
+      setVoiceCurrentTime(0);
+    };
+
+    audio.addEventListener("timeupdate", onTimeUpdate);
+    audio.addEventListener("ended", onEnded);
+
+    return () => {
+      audio.removeEventListener("timeupdate", onTimeUpdate);
+      audio.removeEventListener("ended", onEnded);
+    };
+  }, [voiceDuration]);
+
+  const formatTime = (seconds: number) => {
+    const mins = Math.floor(seconds / 60);
+    const secs = Math.floor(seconds % 60)
+      .toString()
+      .padStart(2, "0");
+    return `${mins}:${secs}`;
   };
 
   return (
@@ -221,7 +273,7 @@ export default function FinalLetter({ onRestart }: FinalLetterProps) {
               })}
             </div>
 
-            <div className="flex flex-col sm:flex-row justify-center gap-3">
+            <div className="flex flex-col sm:flex-row justify-center gap-3 mb-6">
               <button
                 onClick={onRestart}
                 className="rounded-full bg-[#f04299] text-white px-5 py-2.5 text-sm sm:text-base font-semibold shadow hover:scale-105 transition"
@@ -237,6 +289,56 @@ export default function FinalLetter({ onRestart }: FinalLetterProps) {
               >
                 {textConfig.finalLetter.sendKissButton}
               </button>
+            </div>
+
+            <div className="mt-6 pt-6 border-t border-pink-200">
+              <div className="text-center mb-3">
+                <p className="text-lg sm:text-xl font-black text-[#f04299] animate-zoom-pulse">
+                  Play it Please 💝
+                </p>
+              </div>
+
+              <div className="bg-gradient-to-br from-pink-50 to-pink-100 rounded-2xl p-4 sm:p-5 shadow-lg border-2 border-[#f04299] animate-zoom-pulse">
+                <audio ref={audioRef} src={voiceRecording} preload="metadata" />
+
+                <div className="flex items-center gap-4">
+                  <button
+                    onClick={toggleVoicePlay}
+                    className={`w-14 h-14 rounded-full flex items-center justify-center shadow-lg transition-all transform ${
+                      isPlayingVoice
+                        ? "bg-[#f04299] text-white scale-110"
+                        : "bg-white text-[#f04299] border-2 border-[#f04299]"
+                    } hover:scale-125 focus:outline-none focus:ring-4 focus:ring-pink-300`}
+                  >
+                    {isPlayingVoice ? (
+                      <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor">
+                        <rect x="6" y="4" width="4" height="16" rx="2" />
+                        <rect x="14" y="4" width="4" height="16" rx="2" />
+                      </svg>
+                    ) : (
+                      <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor">
+                        <path d="M8 5v14l11-7z" />
+                      </svg>
+                    )}
+                  </button>
+
+                  <div className="flex-1">
+                    <div className="mb-2 flex items-center justify-between">
+                      <span className="text-sm font-bold text-[#f04299]">Voice Message</span>
+                      <span className="text-xs font-medium text-[#9a4c73]">
+                        {formatTime(voiceCurrentTime)} / {formatTime(voiceDuration)}
+                      </span>
+                    </div>
+
+                    <div className="w-full h-2 bg-white rounded-full overflow-hidden shadow-inner">
+                      <div
+                        className="h-full bg-gradient-to-r from-[#f04299] to-[#ff6bb3] rounded-full transition-all duration-300"
+                        style={{ width: `${voiceProgress}%` }}
+                      />
+                    </div>
+                  </div>
+                </div>
+              </div>
             </div>
           </div>
         )}
@@ -258,6 +360,7 @@ export default function FinalLetter({ onRestart }: FinalLetterProps) {
         .animate-pulse-tiny { animation: pulseTiny 6s ease-in-out infinite; }
         .animate-seal-spin { animation: spinSeal 1.4s ease-in-out; }
         .animate-pulse-heart { animation: pulseHeart 1.1s ease-in-out infinite; }
+        .animate-zoom-pulse { animation: zoomPulse 2s ease-in-out infinite; }
 
         @keyframes floatSlow {
           0% { transform: translateY(0) translateX(0); opacity: .9; }
@@ -283,6 +386,11 @@ export default function FinalLetter({ onRestart }: FinalLetterProps) {
           0% { transform: scale(1); opacity: 0.8; }
           50% { transform: scale(1.18); opacity: 1; }
           100% { transform: scale(1); opacity: 0.8; }
+        }
+        @keyframes zoomPulse {
+          0% { transform: scale(1); }
+          50% { transform: scale(1.08); }
+          100% { transform: scale(1); }
         }
 
         /* Improved kiss particle animation: drift, rotate, fade, sparkle */
