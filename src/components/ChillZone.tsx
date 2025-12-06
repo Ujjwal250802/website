@@ -61,11 +61,13 @@ export default function ChillZone({ onNext }: ChillZoneProps) {
   const scrollLeft = () => {
     if (!scrollContainerRef.current) return;
     scrollContainerRef.current.scrollBy({ left: -300, behavior: "smooth" });
+    setTimeout(checkScrollPosition, 400);
   };
 
   const scrollRight = () => {
     if (!scrollContainerRef.current) return;
     scrollContainerRef.current.scrollBy({ left: 300, behavior: "smooth" });
+    setTimeout(checkScrollPosition, 400);
   };
 
   // play/pause logic: only one plays at a time
@@ -172,10 +174,10 @@ export default function ChillZone({ onNext }: ChillZoneProps) {
     };
   }, []);
 
-  // Initialize scroll position check
+  // Initialize scroll position check and update on track changes
   useEffect(() => {
-    checkScrollPosition();
-  }, []);
+    setTimeout(checkScrollPosition, 100);
+  }, [tracks]);
 
   return (
     <div className="font-display relative min-h-screen flex flex-col items-center justify-center px-4 sm:px-6 md:px-8 py-6">
