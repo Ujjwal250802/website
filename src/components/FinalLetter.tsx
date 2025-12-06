@@ -216,6 +216,56 @@ export default function FinalLetter({ onRestart }: FinalLetterProps) {
               <p className="text-[#f04299] font-medium">{textConfig.finalLetter.letterParagraphs[4]}</p>
             </article>
 
+            <div className="mt-6 pt-6 border-t border-pink-200">
+              <div className="text-center mb-3">
+                <p className="text-lg sm:text-xl font-black text-[#f04299] animate-zoom-pulse">
+                  Play it Please 💝
+                </p>
+              </div>
+
+              <div className="bg-gradient-to-br from-pink-50 to-pink-100 rounded-2xl p-4 sm:p-5 shadow-lg border-2 border-[#f04299] animate-zoom-pulse">
+                <audio ref={audioRef} src={voiceRecording} preload="metadata" />
+
+                <div className="flex items-center gap-4">
+                  <button
+                    onClick={toggleVoicePlay}
+                    className={`w-14 h-14 rounded-full flex items-center justify-center shadow-lg transition-all transform ${
+                      isPlayingVoice
+                        ? "bg-[#f04299] text-white scale-110"
+                        : "bg-white text-[#f04299] border-2 border-[#f04299]"
+                    } hover:scale-125 focus:outline-none focus:ring-4 focus:ring-pink-300`}
+                  >
+                    {isPlayingVoice ? (
+                      <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor">
+                        <rect x="6" y="4" width="4" height="16" rx="2" />
+                        <rect x="14" y="4" width="4" height="16" rx="2" />
+                      </svg>
+                    ) : (
+                      <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor">
+                        <path d="M8 5v14l11-7z" />
+                      </svg>
+                    )}
+                  </button>
+
+                  <div className="flex-1">
+                    <div className="mb-2 flex items-center justify-between">
+                      <span className="text-sm font-bold text-[#f04299]">Voice Message</span>
+                      <span className="text-xs font-medium text-[#9a4c73]">
+                        {formatTime(voiceCurrentTime)} / {formatTime(voiceDuration)}
+                      </span>
+                    </div>
+
+                    <div className="w-full h-2 bg-white rounded-full overflow-hidden shadow-inner">
+                      <div
+                        className="h-full bg-gradient-to-r from-[#f04299] to-[#ff6bb3] rounded-full transition-all duration-300"
+                        style={{ width: `${voiceProgress}%` }}
+                      />
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
             <div className="mt-6 flex flex-col sm:flex-row justify-between gap-3 items-center">
               <div className="text-xs text-[#9a4c73]">{textConfig.finalLetter.sealingNote}</div>
               <div className="flex gap-3">
@@ -273,7 +323,7 @@ export default function FinalLetter({ onRestart }: FinalLetterProps) {
               })}
             </div>
 
-            <div className="flex flex-col sm:flex-row justify-center gap-3 mb-6">
+            <div className="flex flex-col sm:flex-row justify-center gap-3">
               <button
                 onClick={onRestart}
                 className="rounded-full bg-[#f04299] text-white px-5 py-2.5 text-sm sm:text-base font-semibold shadow hover:scale-105 transition"
@@ -289,56 +339,6 @@ export default function FinalLetter({ onRestart }: FinalLetterProps) {
               >
                 {textConfig.finalLetter.sendKissButton}
               </button>
-            </div>
-
-            <div className="mt-6 pt-6 border-t border-pink-200">
-              <div className="text-center mb-3">
-                <p className="text-lg sm:text-xl font-black text-[#f04299] animate-zoom-pulse">
-                  Play it Please 💝
-                </p>
-              </div>
-
-              <div className="bg-gradient-to-br from-pink-50 to-pink-100 rounded-2xl p-4 sm:p-5 shadow-lg border-2 border-[#f04299] animate-zoom-pulse">
-                <audio ref={audioRef} src={voiceRecording} preload="metadata" />
-
-                <div className="flex items-center gap-4">
-                  <button
-                    onClick={toggleVoicePlay}
-                    className={`w-14 h-14 rounded-full flex items-center justify-center shadow-lg transition-all transform ${
-                      isPlayingVoice
-                        ? "bg-[#f04299] text-white scale-110"
-                        : "bg-white text-[#f04299] border-2 border-[#f04299]"
-                    } hover:scale-125 focus:outline-none focus:ring-4 focus:ring-pink-300`}
-                  >
-                    {isPlayingVoice ? (
-                      <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor">
-                        <rect x="6" y="4" width="4" height="16" rx="2" />
-                        <rect x="14" y="4" width="4" height="16" rx="2" />
-                      </svg>
-                    ) : (
-                      <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor">
-                        <path d="M8 5v14l11-7z" />
-                      </svg>
-                    )}
-                  </button>
-
-                  <div className="flex-1">
-                    <div className="mb-2 flex items-center justify-between">
-                      <span className="text-sm font-bold text-[#f04299]">Voice Message</span>
-                      <span className="text-xs font-medium text-[#9a4c73]">
-                        {formatTime(voiceCurrentTime)} / {formatTime(voiceDuration)}
-                      </span>
-                    </div>
-
-                    <div className="w-full h-2 bg-white rounded-full overflow-hidden shadow-inner">
-                      <div
-                        className="h-full bg-gradient-to-r from-[#f04299] to-[#ff6bb3] rounded-full transition-all duration-300"
-                        style={{ width: `${voiceProgress}%` }}
-                      />
-                    </div>
-                  </div>
-                </div>
-              </div>
             </div>
           </div>
         )}
